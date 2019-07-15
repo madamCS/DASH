@@ -1,6 +1,7 @@
 # dash
 data + fashion = dash!
 
+How it works:
 1. Pick a file from your Google Drive Photos using the Google Drive Picker (on HTML page).
 1. Click "Submit" (on HTML page) to send your image's fileId to the corresponding Google Cloud Function.
 1. FileId gets turned into raw file bytes.

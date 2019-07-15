@@ -1,0 +1,163 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+        <title>DASH</title>
+        <link rel="stylesheet" href="dash.css">
+        <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    </head>
+        
+    <script type="text/javascript">
+      /** GLOBAL VARIABLES **/
+      // The Browser API key obtained from the Google API Console.
+      var API_KEY = 'AIzaSyCViLscNNeIt7c6EkNdV2uHA_2KGs6HzCA';
+      // The Client ID obtained from the Google API Console. Replace with your own Client ID.
+      var CLIENT_ID = '838291707056-ntc1f0k4apn5qsho55k6rvcfmp019bcv.apps.googleusercontent.com';
+      // Scope to use to access user's drive.
+      var SCOPES = 'https://www.googleapis.com/auth/drive';
+      var APP_ID = "838291707056";
+      var PICKER_API_LOADED = false;
+      var OAUTH_TOKEN;
+      var AUTH_PARAM = '';
+      var FILE_ID = 'nothing';
+        
+      // Use the API Loader script to load google.picker and gapi.auth.
+      function onApiLoad() {
+        gapi.load('auth2', onAuthApiLoad);
+        gapi.load('picker', onPickerApiLoad);
+      }
+        
+      function onAuthApiLoad() {
+        var authBtn = document.getElementById('auth');
+        authBtn.disabled = false;
+        authBtn.addEventListener('click', function() {
+          gapi.auth2.init({ 
+              'apiKey': API_KEY,
+              'clientId': CLIENT_ID,
+              'scope': SCOPES,
+              'discoveryDocs': ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+          }).then(function(googleAuth) {
+            googleAuth.signIn({ 
+                scope: SCOPES 
+            }).then(function(result) {
+              handleAuthResult(result.getAuthResponse());
+              gapi.auth2.getAuthInstance().isSignedIn.listen(updateSignInStatus);
+              updateSignInStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            })
+          })
+        });
+      }
+
+      function handleAuthResult(authResult) {
+        if (authResult && !authResult.error) {
+          OAUTH_TOKEN = authResult.access_token;
+          createPicker();
+        }
+      }
+        
+      function onPickerApiLoad() {
+        PICKER_API_LOADED = true;
+        createPicker();
+      }
+
+      // Create and render a Picker object for picking user photos.
+      function createPicker() {
+      if (PICKER_API_LOADED && OAUTH_TOKEN) {
+        var view = new google.picker.DocsView();
+        view.setMimeTypes("image/png,image/jpeg,image/jpg");
+        var picker = new google.picker.PickerBuilder()
+            .enableFeature(google.picker.Feature.NAV_HIDDEN)
+            .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+            .setAppId(APP_ID)
+            .setOAuthToken(OAUTH_TOKEN)
+            .addView(view)
+            .addView(new google.picker.DocsUploadView())
+            .setDeveloperKey(API_KEY)
+            .setCallback(pickerCallback)
+            .build();
+         picker.setVisible(true);
+         setAuthToken();
+      }
+    }
+        
+    function setAuthToken() {
+        var googleAuth = gapi.auth2.getAuthInstance();
+        var googleUser = googleAuth.currentUser.get();
+        AUTH_PARAM = googleUser.getAuthResponse(true);
+        AUTH_PARAM = AUTH_PARAM.access_token;
+        console.log("Auth param is: " + AUTH_PARAM);
+    }
+        
+      // Get data from picker.
+      function pickerCallback(data) {
+        if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+          FILE_ID = data[google.picker.Response.DOCUMENTS][0].id;          
+          var message = 'File successfully picked!<br> Now hit submit!';
+          document.getElementById('result').innerHTML = message;
+          var authBtn = document.getElementById('auth');
+          authBtn.disabled = true;
+        }  
+      }
+        
+      function updateSignInStatus(isSignedIn) {
+          if (isSignedIn) {
+            // Handle if a user is signed in. 
+            // Empty on default.
+          }
+    }
+        
+       // Makes the 'GET' request.
+       function myFunction() {
+           
+           // Google Cloud Function URL.
+            var functionEndpoint = "https://us-central1-myphproject.cloudfunctions.net/analyzeImage";
+                
+            var data = {
+                'auth': AUTH_PARAM,
+                'fileId': FILE_ID
+            }
+            
+            // Make the fetch request to your GCF.      
+             fetch(functionEndpoint, {
+                   method: 'POST',
+                   body: JSON.stringify(data),
+                   headers:{
+                       'Content-Type': 'application/json'
+                   }
+                }).then(res => res.json())
+                  .then(function(url) {
+                     console.log("this is the function res: " + url);
+                     var sheetUrl = url;
+                     document.getElementById("link").setAttribute("href", sheetUrl);
+                     document.getElementById("link").innerHTML = "Click to view your data...";
+             }).catch(function(err) {
+                      console.log("Err is:" + err);
+                  });
+        } //closes myFunction
+
+    </script> 
+    <body>
+        <br><br>
+        <div id="bigText">
+            cloud vision data
+        </div>
+        
+         <!-- The Google API Loader script. -->
+         <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
+
+        <p> Step 1: Authenticate. Make sure that the image file you are picking from your Google Drive         is a publically viewable.</p>
+        
+        <!-- Authenticate button. -->
+        <button type="button" id="auth" class="blueButton" disabled>authenticate</button>
+        <br><br>
+        <div id="result"></div>
+        
+        <p> Step 2: Send your image through to the Google Vision API, & a Google Sheet will be generated. Yee!
+        
+        <!-- Submit button. --> 
+        <button type="button" class="blueButton" onclick="myFunction()">submit</button>
+        
+        <!-- Link tag to output the spreadsheet's link. -->    
+        <a id="link" target="_blank"><!--output link here--></a>
+    </body>
+</html>

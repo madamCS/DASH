@@ -4,14 +4,14 @@ body {
 }
 
 #bigText {
-    color: #33ccff;
-    text-shadow: #33ccff 0 0 0.3em;
-    font-size: 60px;
+    color: #d9d9d9; 
+    text-shadow: #fff792 0 0 0.3em;
+    font-size: 40px;
 }
 
 .blueButton {
-  border: 2px solid #33ccff;
-  color: #33ccff;
+  border: 2px solid #d9d9d9;
+  color: #d9d9d9;
   background-color: white;
   font-family: 'Montserrat', sans-serif;
   padding: 8px 20px;
@@ -23,6 +23,7 @@ body {
 
 .blueButton:hover {
     cursor: pointer;
+    text-shadow: #fff792 0 0 0.3em;
 }
 
 p {

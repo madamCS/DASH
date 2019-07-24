@@ -12,6 +12,7 @@ Ultimately, the framework used in this solution can be replicated for any vertic
 is purely to demonstrate how Cloud & AutoML can be used to further advance methods of data analytics
 within companies.
 
+[bof-article]: https://www.businessoffashion.com/articles/professional/how-to-tackle-fashions-tech-deficit-hire-the-right-people
 [g-c-f]:http://cloud.google.com/functions
 [auto-ml]: https://cloud.google.com/automl/
 [sheets-api]: https://developers.google.com/sheets/api/

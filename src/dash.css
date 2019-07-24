@@ -4,14 +4,14 @@ body {
 }
 
 #bigText {
-    color: #d9d9d9; 
+    color: #000000; 
     text-shadow: #fff792 0 0 0.3em;
     font-size: 40px;
 }
 
 .blueButton {
-  border: 2px solid #d9d9d9;
-  color: #d9d9d9;
+  border: 2px solid #000000;
+  color: #000000;
   background-color: white;
   font-family: 'Montserrat', sans-serif;
   padding: 8px 20px;
@@ -43,6 +43,12 @@ a {
 a:hover {
     color:#33ccff;
     cursor:pointer;
+}
+
+#italic {
+    font-style:italic;
+    font-size:15px;
+    text-align:center;
 }
     
     

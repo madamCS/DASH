@@ -24,12 +24,19 @@
       var AUTH_PARAM = '';
       var FILE_ID = 'nothing';
         
-      // Use the API Loader script to load google.picker and gapi.auth.
+      /**
+       * Uses the API loader script to load authentication
+       * and picker scripts.
+       */
       function onApiLoad() {
         gapi.load('auth2', onAuthApiLoad);
         gapi.load('picker', onPickerApiLoad);
       }
         
+      /** 
+       * Handles when the auth API is loaded.
+       * Sets the gapi client.
+       */
       function onAuthApiLoad() {
         var authBtn = document.getElementById('auth');
         authBtn.disabled = false;
@@ -51,6 +58,10 @@
         });
       }
 
+      /**
+       * Handles authentication result and calls
+       * createPicker() function.
+       */
       function handleAuthResult(authResult) {
         if (authResult && !authResult.error) {
           OAUTH_TOKEN = authResult.access_token;
@@ -58,12 +69,18 @@
         }
       }
         
+      /**
+       * Handles when the picker is loaded.
+       */
       function onPickerApiLoad() {
         PICKER_API_LOADED = true;
         createPicker();
       }
 
-      // Create and render a Picker object for picking user photos.
+      /**
+       * Creates and renders a Picker object for 
+       * picking user photos.
+       */
       function createPicker() {
       if (PICKER_API_LOADED && OAUTH_TOKEN) {
         var view = new google.picker.DocsView();
@@ -83,6 +100,9 @@
       }
     }
         
+    /**
+     * Sets authentication token.
+     */
     function setAuthToken() {
         var googleAuth = gapi.auth2.getAuthInstance();
         var googleUser = googleAuth.currentUser.get();
@@ -91,7 +111,9 @@
         console.log("Auth param is: " + AUTH_PARAM);
     }
         
-      // Get data from picker.
+      /**
+       * Gets data from the Google Picker (image file ID).
+       */
       function pickerCallback(data) {
         if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
           FILE_ID = data[google.picker.Response.DOCUMENTS][0].id;          
@@ -101,20 +123,25 @@
           authBtn.disabled = true;
         }  
       }
-        
+      
+      /**
+       * Handles if a user is signed in.
+       */
       function updateSignInStatus(isSignedIn) {
           if (isSignedIn) {
-            // Handle if a user is signed in. 
             // Empty on default.
           }
-    }
+      }
         
-       // Makes the 'GET' request.
+       /**
+        * Makes a 'POST' request to a Google Cloud Function.
+        * Sends the GCF its end-user authentication & picked
+        * image file ID.
+        * Receives a newly created Spreadsheet URL back from server.
+        */
        function myFunction() {
-           
            // Google Cloud Function URL.
             var functionEndpoint = "https://us-central1-myphproject.cloudfunctions.net/analyzeImage";
-                
             var data = {
                 'auth': AUTH_PARAM,
                 'fileId': FILE_ID
@@ -136,15 +163,16 @@
              }).catch(function(err) {
                       console.log("Err is:" + err);
                   });
-        } //closes myFunction
-
+        }
     </script> 
     <body>
         <br><br>
         <div id="bigText">
             DASH <br>
-            <p id="italic">fashion data analytics powered by<br>
-                Google Cloud</p>
+            <p id="italic">
+             fashion data analytics powered by<br>
+             Google Cloud
+            </p>
             <img src="dashlogo.png" width="100px">
         </div>
         
@@ -162,7 +190,6 @@
         
         <!-- Submit button. --> 
         <button type="button" class="blueButton" onclick="myFunction()">submit</button>
-        
         <!-- Link tag to output the spreadsheet's link. -->    
         <a id="link" target="_blank"><!--output link here--></a>
     </body>

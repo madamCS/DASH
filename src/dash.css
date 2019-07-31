@@ -27,9 +27,6 @@ body {
 }
 
 p {
-    width:30%;
-    margin-right: auto;
-    margin-left: auto;
     text-align: left;
     color: #aaaaaa;
 }
@@ -49,6 +46,22 @@ a:hover {
     font-style:italic;
     font-size:15px;
     text-align:center;
+}
+
+#frontBody {
+    width:600px;
+    margin-right:auto;
+    margin-left:auto;
+}
+
+#column1 {
+    width:300px;
+    float:left;
+}
+
+#column2 {
+    width:300px;
+    float:left;
 }
     
     

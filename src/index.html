@@ -179,18 +179,26 @@
          <!-- The Google API Loader script. -->
          <script type="text/javascript" src="https://apis.google.com/js/api.js?onload=onApiLoad"></script>
 
+        <div id="frontBody">
+        <div id="column1">
         <p> Step 1: Authenticate. Make sure that the image file you are picking from your Google Drive         is a publically viewable.</p>
-        
         <!-- Authenticate button. -->
         <button type="button" id="auth" class="blueButton" disabled>authenticate</button>
         <br><br>
         <div id="result"></div>
+        </div><!--closes column1-->
         
+        <div id="column2">
         <p> Step 2: Send your image through to the Google Vision API, & a Google Sheet will be generated. Yee! </p>
-        
         <!-- Submit button. --> 
         <button type="button" class="blueButton" onclick="myFunction()">submit</button>
-        <!-- Link tag to output the spreadsheet's link. -->    
+          
+        </div><!--closes column2-->
+        
+        <!-- Link tag to output the spreadsheet's link. -->  
         <a id="link" target="_blank"><!--output link here--></a>
+
+        </div> <!--closes frontBody-->
+        
     </body>
 </html>

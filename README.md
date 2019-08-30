@@ -32,6 +32,12 @@ within companies.
   to the end-user
 
 
-## TODO:
-1. VisionAPI will be replaced with AutoML trained on fashion trends.
+## READ MORE:
+[Motivation behind the project][blog-1]
+[Obtaining the dataset for ML training][blog-2]
+[Using the Sheets API for data analytics][blog-3]
+
+[blog-1]: https://medium.com/@yoyomade/how-computer-science-can-make-you-more-fashionable-57a0997c85e7
+[blog-2]: https://medium.com/@yoyomade/my-not-illegal-machine-learning-project-d671ad436f2e
+[blog-3]: https://towardsdatascience.com/more-data-more-sheets-api-b1e3ddfa0d1
 
